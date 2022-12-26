@@ -12,4 +12,5 @@ class PaymentStatus:
         self.process = "Pending"
 
     def complete(self):
+        self.process = "Complete"
         self.processed = True

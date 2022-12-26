@@ -2,7 +2,7 @@
 from PaymentSystems.PaymentStatus import PaymentStatus
 from PaymentSystems.Authentication import Authentication
 from PaymentSystems.ErrorHandler import AuthenticationError, CaptureError
-from ExternalTools.BankAccount import authorize, bank_capture, BankAccount
+from ExternalTools.BankAccount import authorize, bank_capture, BankAccount, capture_payment
 
 
 class Payment:
@@ -13,13 +13,14 @@ class Payment:
 
 
 class CreditCardPayment(Payment):
-    def __init__(self, amount, card_name, card_number, expiration_date):
+    def __init__(self, amount, card_name, card_number, expiration_date, merchant_name):
         super().__init__(amount)
         self.card_name = card_name
         self.card_number = card_number
         self.expiration_date = expiration_date
         self.bank = None
         self.capture_id = None
+        self.merchant_name = merchant_name
 
     def authenticate(self):
         account = authorize(self.card_name)
@@ -31,7 +32,7 @@ class CreditCardPayment(Payment):
 
     def capture(self):
         """requests funds to be transferred from customer to merchant account"""
-        capture_id = bank_capture(self.card_name, self.amount)
+        capture_id = bank_capture(self.card_name, self.amount, self)
         if capture_id is not None:
             self.status.pending()
             self.capture_id = capture_id
