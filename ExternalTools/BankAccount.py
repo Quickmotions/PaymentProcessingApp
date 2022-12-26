@@ -57,6 +57,7 @@ def bank_capture(name, amount, payment_request) -> int:
     raise NameError("Missing bank account")
 
 async def capture_payment():
+    # TODO: run each bank capture in a different thread instead
     for capture in bank_captures:
         await asyncio.sleep(random.randint(1, 10))
         for account in bank_accounts:
