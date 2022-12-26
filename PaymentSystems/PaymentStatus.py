@@ -3,6 +3,13 @@
 class PaymentStatus:
     def __init__(self, processed=False):
         self.processed = processed
+        self.process = "Authorisation"
+
+    def authorised(self):
+        self.process = "Authorised"
+
+    def pending(self):
+        self.process = "Pending"
 
     def complete(self):
         self.processed = True
